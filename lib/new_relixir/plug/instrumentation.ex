@@ -45,7 +45,7 @@ defmodule NewRelixir.Plug.Instrumentation do
     model_name(model_type)
   end
 
-  defp infer_model(%Ecto.Changeset{model: model}) do
+  defp infer_model(%Ecto.Changeset{data: model}) do
     infer_model(model)
   end
 
@@ -53,7 +53,7 @@ defmodule NewRelixir.Plug.Instrumentation do
     model_name(model_type)
   end
 
-  defp infer_model(%Ecto.Query{}) do
+  defp infer_model(_) do
     nil
   end
 
@@ -62,7 +62,10 @@ defmodule NewRelixir.Plug.Instrumentation do
   end
 
   defp model_name(model_type) do
-    model_type |> Module.split |> List.last
+    model_type
+    |> inspect
+    |> String.split(".")
+    |> List.last
   end
 
   defp record(opts, elapsed) do
